@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Directory Finder</title>
+    <meta name="description" content="Find direct download links for movies, TV series, books, music, software, and games.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        :root {
+            --google-blue: #4285F4;
+            --google-red: #EA4335;
+            --google-yellow: #FBBC05;
+            --text-main: #202124;
+            --text-muted: #5f6368;
+            --bg-hover: #f8f9fa;
+            --border-color: #dfe1e5;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 12vh; 
+        }
+
+        .logo {
+            font-size: 72px;
+            font-weight: 500;
+            letter-spacing: -2px;
+            margin-bottom: 30px;
+            user-select: none;
+            text-align: center;
+            line-height: 1;
+        }
+        
+        .logo span:nth-child(1) { color: var(--google-blue); }
+        .logo span:nth-child(2) { color: var(--google-red); }
+        .logo span:nth-child(3) { color: var(--google-yellow); }
+        .logo span:nth-child(4) { color: var(--google-blue); }
+        
+        .logo-sub {
+            display: block;
+            font-size: 24px;
+            color: var(--text-muted);
+            letter-spacing: 0px;
+            margin-top: -5px;
+            font-weight: 400;
+        }
+
+        .search-bar-wrapper {
+            width: 100%;
+            max-width: 740px; 
+            padding: 0 20px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .search-bar {
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            height: 48px;
+            padding: 0 16px 0 6px;
+            background: #fff;
+            transition: box-shadow 200ms ease-in-out, border-color 200ms ease-in-out;
+        }
+        
+        .search-bar:hover, .search-bar:focus-within {
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            border-color: transparent;
+        }
+
+        .engine-btn {
+            background: transparent;
+            border: none;
+            height: 36px;
+            padding: 0 12px;
+            border-radius: 18px;
+            color: var(--text-main);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .engine-btn:hover, .dropdown.show .engine-btn {
+            background: var(--bg-hover);
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: var(--text-main);
+            padding-left: 10px;
+        }
+
+        .format-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            height: 48px;
+            padding: 0 20px;
+            color: var(--text-main);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .format-btn:hover, .dropdown.show .format-btn {
+            background: var(--bg-hover);
+        }
+        
+        .dropdown-menu {
+            font-size: 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+            padding: 8px 0;
+            margin-top: 6px !important;
+        }
+        
+        .dropdown-item {
+            padding: 8px 16px;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        
+        .github-link:hover {
+            color: var(--text-main);
+        }
+
+        /* stack items on small mobile screens */
+        @media (max-width: 600px) {
+            .logo { font-size: 56px; }
+            .search-row { flex-direction: column; }
+            .search-bar { width: 100%; }
+            .format-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div class="logo">
+            <span>O</span><span>p</span><span>e</span><span>n</span>Dir
+            <span class="logo-sub">Finder</span>
+        </div>
+
+        <div class="search-bar-wrapper">
+            <form id="searchForm">
+                
+                <div class="search-row">
+                    
+                    <div class="search-bar">
+                        <!-- engine menu inside the search bar -->
+                        <div class="dropdown h-100 d-flex align-items-center">
+                            <button class="engine-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" id="btn-engine">
+                                <i class="fa-brands fa-google text-muted"></i> <span class="d-none d-sm-inline">Google</span>
+                            </button>
+                            <ul class="dropdown-menu" id="engine-menu">
+                                <li><a class="dropdown-item" href="#" data-engine="google" data-icon="fa-google" data-name="Google"><i class="fa-brands fa-google text-muted me-2"></i> Google</a></li>
+                                <li><a class="dropdown-item" href="#" data-engine="duckduckgo" data-icon="fa-duckduckgo" data-name="DuckDuckGo"><i class="fa-brands fa-duckduckgo text-muted me-2"></i> DuckDuckGo</a></li>
+                                <li><a class="dropdown-item" href="#" data-engine="startpage" data-icon="fa-user-secret" data-name="Startpage"><i class="fa-solid fa-user-secret text-muted me-2"></i> Startpage</a></li>
+                                <li><a class="dropdown-item" href="#" data-engine="searx" data-icon="fa-searchengin" data-name="Searx"><i class="fa-brands fa-searchengin text-muted me-2"></i> Searx</a></li>
+                                <li><a class="dropdown-item" href="#" data-engine="filepursuit" data-icon="fa-magnifying-glass-chart" data-name="FilePursuit"><i class="fa-solid fa-magnifying-glass-chart text-muted me-2"></i> FilePursuit</a></li>
+                            </ul>
+                        </div>
+                        
+                        <input type="text" class="search-input" id="search-query" placeholder="Search the open web..." required autofocus autocomplete="off">
+                    </div>
+
+                    <!-- format menu beside the search bar -->
+                    <div class="dropdown">
+                        <button class="format-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" id="btn-category">
+                            <i class="fa-solid fa-film text-muted"></i> Video
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" id="category-menu">
+                            <li><a class="dropdown-item" href="#" data-ext="mkv|mp4|avi|mov|mpg|wmv|divx|mpeg" data-restype="video" data-icon="fa-film" data-name="Video"><i class="fa-solid fa-film text-muted me-2"></i> TV/Movies/Video</a></li>
+                            <li><a class="dropdown-item" href="#" data-ext="MOBI|CBZ|CBR|CBC|CHM|EPUB|FB2|LIT|LRF|ODT|PDF|PRC|PDB|PML|RB|RTF|TCR|DOC|DOCX" data-restype="ebook" data-icon="fa-book" data-name="Books"><i class="fa-solid fa-book text-muted me-2"></i> Books/Comics</a></li>
+                            <li><a class="dropdown-item" href="#" data-ext="mp3|wav|ac3|ogg|flac|wma|m4a|aac|mod" data-restype="audio" data-icon="fa-music" data-name="Music"><i class="fa-solid fa-music text-muted me-2"></i> Music</a></li>
+                            <li><a class="dropdown-item" href="#" data-ext="exe|iso|dmg|tar|7z|bz2|gz|rar|zip|apk" data-restype="archive" data-icon="fa-compact-disc" data-name="Software"><i class="fa-solid fa-compact-disc text-muted me-2"></i> Software/Games</a></li>
+                            <li><a class="dropdown-item" href="#" data-ext="jpg|png|bmp|gif|tif|tiff|psd" data-restype="picture" data-icon="fa-image" data-name="Images"><i class="fa-solid fa-image text-muted me-2"></i> Images</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" data-ext="" data-restype="all" data-icon="fa-asterisk" data-name="Any Format"><i class="fa-solid fa-asterisk text-muted me-2"></i> Any Format</a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <div class="text-center">
+                    <a href="https://github.com/amanvite/open-directory-finder" target="_blank" class="github-link">
+                        <i class="fa-brands fa-github me-1"></i> amanvite/open-directory-finder
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // default settings
+            const state = {
+                ext: 'mkv|mp4|avi|mov|mpg|wmv|divx|mpeg',
+                resType: 'video',
+                engine: 'google'
+            };
+
+            const searchInput = document.getElementById('search-query');
+
+            // update file format logic
+            document.getElementById('category-menu').addEventListener('click', (e) => {
+                const item = e.target.closest('.dropdown-item');
+                if (!item) return;
+                
+                e.preventDefault();
+                state.ext = item.dataset.ext;
+                state.resType = item.dataset.restype;
+                
+                document.getElementById('btn-category').innerHTML = `<i class="fa-solid ${item.dataset.icon} text-muted me-1"></i> ${item.dataset.name}`;
+                searchInput.focus();
+            });
+
+            // update search engine logic
+            document.getElementById('engine-menu').addEventListener('click', (e) => {
+                const item = e.target.closest('.dropdown-item');
+                if (!item) return;
+                
+                e.preventDefault();
+                state.engine = item.dataset.engine;
+                
+                const iconClass = item.dataset.icon.includes('fa-') && !item.dataset.icon.includes(' ') ? 
+                    (item.dataset.icon === 'fa-google' || item.dataset.icon === 'fa-duckduckgo' || item.dataset.icon === 'fa-searchengin' ? 'fa-brands' : 'fa-solid') 
+                    : '';
+                
+                document.getElementById('btn-engine').innerHTML = `<i class="${iconClass} ${item.dataset.icon} text-muted me-1"></i> <span class="d-none d-sm-inline">${item.dataset.name}</span>`;
+                searchInput.focus();
+            });
+
+            // generate dork and execute search
+            document.getElementById('searchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                const exclude = "-inurl:(jsp|pl|php|html|aspx|htm|cf|shtml|listen77|mp3raid|mp3toss|mp3drug|index_of|index-of|wallywashis|downloadmana)";
+                const fileType = state.ext ? `+(${state.ext})` : '';
+                const finalQuery = `${query} ${fileType} intitle:index.of ${exclude}`;
+                const encoded = encodeURIComponent(finalQuery);
+                
+                const urls = {
+                    'google': `https://www.google.com/search?q=${encoded}`,
+                    'duckduckgo': `https://duckduckgo.com/?q=${encoded}`,
+                    'startpage': `https://www.startpage.com/sp/search?query=${encoded}`,
+                    'searx': `https://searx.be/search?q=${encoded}`,
+                    'filepursuit': `https://filepursuit.com/search/${query.replace(/\s+/g, "+")}/type/${state.resType === 'all' ? 'all' : state.resType}`
+                };
+
+                window.open(urls[state.engine], '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
