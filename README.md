@@ -1,14 +1,15 @@
 # Open Directory Finder
 
-A clean, minimalist UI that automates Google Dorks to find open web directories containing direct download links for movies, books, music, and software.
+A lightweight tool for discovering publicly indexed file directories across multiple search engines.
 
-## Features
-* **Zero Typing for Dorks:** Automatically formats complex search strings to filter out spam and HTML pages.
-* **Category Filters:** Target specific file extensions (Video, Audio, Ebooks, ISOs, Archives).
-* **Multi-Engine Support:** Route searches through Google, DuckDuckGo, Startpage, Searx, or FilePursuit.
+### Features
+- Automated search query generation
+- File-type filtering
+- Multi-engine search support
 
-## Usage
-Simply open `index.html` in any web browser, select your desired file type, and enter a search term (e.g., `The Matrix 1999`). 
+### Usage
+Open `index.html`, select a category, enter a query, and choose a search engine.
 
-## Disclaimer
-This tool merely formats search queries for public search engines. It does not host, index, or interact directly with any files or servers. Use responsibly and adhere to copyright laws in your jurisdiction.
+### Disclaimer
+
+This tool is purely a search query formatter and interface. It leverages public search engines to find publicly accessible web servers (Open Source Intelligence / OSINT). It does not host, scrape, index, or interact directly with any files or servers. Please use this tool responsibly and adhere to local copyright laws regarding downloaded content.
